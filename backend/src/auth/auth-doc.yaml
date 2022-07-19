@@ -1,0 +1,85 @@
+paths:
+  /auth/register:
+    post:
+      summary: 'Register a new user'
+      tags:
+        - auth
+      requestBody:
+        $ref: '#/components/requestBody/userReg'
+
+      responses:
+        201:
+          description: 'Saved user data and ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userRes'
+        400:
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'All fields are required.'
+
+ 
+components:
+  schemas:
+    userReg:
+      type: object
+      properties:
+        firstName:
+          type: string
+          max: 20
+          example: Tom
+        lastName:
+          type: string
+          max: 20
+          example: Test
+        email:
+          type: string
+          format: email
+          max: 100
+          example: tom.test@tmail.com
+        password:
+          type: string
+          format: password
+          min: 8
+          max: 100
+          example: Abcd1234
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+    
+    userRes:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: Tom
+            lastName:
+              type: string
+              example: Test
+            email:
+              type: string
+              example: tom.test@tmail.com
+            _id:
+              type: string
+              example: 62d6bc1900cec15491b56907
+   
+  requestBody:
+    userReg:
+      description: JSON object containing userReg schema
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userReg'
