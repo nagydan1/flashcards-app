@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 
-import swaggerJsDoc from 'swagger-jsdoc'
+import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 import { swaggerSettings } from './config';
 

@@ -6,7 +6,7 @@ import HttpError from '../../utils/HttpError';
 
 const registerService = {
   async createUser(userData) {
-    if (!isEmail(userData.email)) throw new HttpError('Invalid e-mail format.', 400);
+    if (!isEmail(userData.email)) throw new HttpError('Invalid e-mail address.', 400);
 
     const foundUser = await User.findOne({ email: userData.email });
     if (foundUser) throw new HttpError('This e-mail is already taken. Try another one.', 400);
@@ -17,7 +17,7 @@ const registerService = {
       return restUserData;
     } catch (error) {
       if (!(error instanceof mongoose.Error)) throw error;
-
+      
       const invalidField = Object.values(error.errors)[0];
       if (invalidField.kind === 'required') {
         throw new HttpError('All fields are required.', 400);

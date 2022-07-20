@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
     maxLength: 100,
     validate: {
       validator: isEmail,
-      message: 'Invalid e-mail address',
+      message: 'Invalid e-mail address.',
     },
   },
   password: {
