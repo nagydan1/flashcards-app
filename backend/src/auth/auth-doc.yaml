@@ -9,13 +9,13 @@ paths:
 
       responses:
         201:
-          description: 'Saved user data and ID'
+          description: 'User data'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/userRes'
         400:
-          description: 'Bad request'
+          description: 'Bad request error message'
           content:
             application/json:
               schema:
@@ -24,6 +24,56 @@ paths:
                   message:
                     type: string
                     example: 'All fields are required.'
+
+  /auth/login:
+    post:
+      summary: 'Log user in'
+      tags:
+        - auth
+      requestBody:
+        $ref: '#/components/requestBody/userLog'
+
+      responses:
+        200:
+          description: 'JWT token'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+        400:
+          description: 'Bad request error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'All fields are required.'
+        401:
+          description: 'Authorization error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'E-mail or password is incorrect.'
+        500:
+          description: 'Server error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error.'
 
  
 components:
@@ -56,6 +106,19 @@ components:
         - email
         - password
     
+    userLog:
+      type: object
+      properties:
+        email:
+          type: string
+          example: tom.test@gmail.com
+        password:
+          type: string
+          example: Abcd1234
+      required:
+        - email
+        - password
+
     userRes:
       type: object
       properties:
@@ -83,3 +146,10 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/userReg'
+    userLog:
+      description: JSON object containing userLog schema
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userLog'
