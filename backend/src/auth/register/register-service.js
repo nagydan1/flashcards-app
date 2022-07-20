@@ -17,7 +17,7 @@ const registerService = {
       return restUserData;
     } catch (error) {
       if (!(error instanceof mongoose.Error)) throw error;
-      
+
       const invalidField = Object.values(error.errors)[0];
       if (invalidField.kind === 'required') {
         throw new HttpError('All fields are required.', 400);

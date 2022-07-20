@@ -5,7 +5,7 @@ import HttpError from '../../utils/HttpError';
 
 jest.mock('../../api/users/user-model');
 
-const mockReqBody = {
+const mockUserData = {
   firstName: 'Tom',
   lastName: 'Test',
   email: 'tom.test@tmail.com',
@@ -14,7 +14,7 @@ const mockReqBody = {
 
 const mockSavedUser = {
   _doc: {
-    ...mockReqBody,
+    ...mockUserData,
     _id: '62d6e17b704d303ebc10084e',
   },
 };
@@ -29,7 +29,7 @@ describe('Register service\'s createUser method', () => {
   it('should throw an error if e-mail format is invalid', async () => {
     expect.assertions(3);
     try {
-      await registerService.createUser({ ...mockReqBody, email: 'invalid@e-mail' });
+      await registerService.createUser({ ...mockUserData, email: 'invalid@e-mail' });
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe('Invalid e-mail address.');
@@ -38,10 +38,10 @@ describe('Register service\'s createUser method', () => {
   });
 
   it('should throw an error if e-mail is already taken', async () => {
-    User.findOne.mockReturnValue(true);
+    User.findOne.mockResolvedValueOnce(true);
     expect.assertions(3);
     try {
-      await registerService.createUser(mockReqBody);
+      await registerService.createUser(mockUserData);
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe('This e-mail is already taken. Try another one.');
@@ -52,7 +52,7 @@ describe('Register service\'s createUser method', () => {
   it('should return user data without password if user is created', async () => {
     User.findOne.mockResolvedValueOnce(null);
     User.prototype.save.mockResolvedValueOnce(mockSavedUser);
-    const user = await registerService.createUser(mockReqBody);
+    const user = await registerService.createUser(mockUserData);
     expect(user).toEqual({
       firstName: 'Tom',
       lastName: 'Test',
@@ -66,7 +66,7 @@ describe('Register service\'s createUser method', () => {
     User.prototype.save.mockRejectedValueOnce(new Error('Something went wrong.'));
     expect.assertions(2);
     try {
-      await registerService.createUser(mockReqBody);
+      await registerService.createUser(mockUserData);
     } catch (error) {
       expect(error).not.toBeInstanceOf(HttpError);
       expect(error.message).toBe('Something went wrong.');
@@ -84,7 +84,7 @@ describe('Register service\'s createUser method', () => {
     User.prototype.save.mockRejectedValueOnce(mockDbError);
     expect.assertions(3);
     try {
-      await registerService.createUser(mockReqBody);
+      await registerService.createUser(mockUserData);
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe('All fields are required.');
@@ -106,7 +106,7 @@ describe('Register service\'s createUser method', () => {
     User.prototype.save.mockRejectedValueOnce(mockDbError);
     expect.assertions(3);
     try {
-      await registerService.createUser(mockReqBody);
+      await registerService.createUser(mockUserData);
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe('firstName can\'t be longer than 20 characters.');
@@ -128,7 +128,7 @@ describe('Register service\'s createUser method', () => {
     User.prototype.save.mockRejectedValueOnce(mockDbError);
     expect.assertions(3);
     try {
-      await registerService.createUser(mockReqBody);
+      await registerService.createUser(mockUserData);
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe('Password must be at least 8 characters, incl. 1 number, 1 uppercase and 1 lowercase letter.');

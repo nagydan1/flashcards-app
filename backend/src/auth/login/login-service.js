@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'; 
-import config from '../../config';
+import jwt from 'jsonwebtoken';
 import { isEmail } from 'validator';
+import config from '../../config';
 
 import User from '../../api/users/user-model';
 import HttpError from '../../utils/HttpError';
@@ -34,20 +34,16 @@ const loginService = {
 
     let user;
     try {
-      user = await User.findOne({ email })
+      user = await User.findOne({ email });
     } catch (error) {
-      error.message = 'Server error.';
-      error.status = 500;
-      throw error;
+      throw new HttpError('Server error.', 500);
     }
 
     let isPasswordCorrect;
     try {
       isPasswordCorrect = await user?.comparePassword(password);
     } catch (error) {
-      error.message = 'Server error.';
-      error.status = 500;
-      throw error;
+      throw new HttpError('Server error.', 500);
     }
 
     if (isPasswordCorrect) return this.createToken(user);
