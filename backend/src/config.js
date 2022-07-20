@@ -5,6 +5,7 @@ const config = {
   db: {
     uri: process.env.DB_URI,
   },
+  jwtSecret: process.env.JWT_SECRET,
 };
 
 export const swaggerSettings = {

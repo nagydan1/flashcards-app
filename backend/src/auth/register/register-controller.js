@@ -5,8 +5,8 @@ const registerController = {
     try {
       const user = await registerService.createUser(req.body);
       res.status(201).json({ user });
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
   },
 };
