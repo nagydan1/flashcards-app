@@ -100,7 +100,7 @@ export function getFormErrorMessages(defaultFormData, formData) {
     };
   });
   if (formData.confirmPassword !== formData.password) {
-    formErrorMessages.confirmPassword.push('Passwords don\'t match. Try again.');
+    formErrorMessages.confirmPassword?.push('Passwords don\'t match. Try again.');
   }
   return formErrorMessages;
 }

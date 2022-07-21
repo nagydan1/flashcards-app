@@ -1,26 +1,25 @@
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icon from 'react-bootstrap-icons';
 import InputField from './InputField';
 import Alert from './Alert';
 import { isFormValid, getFormErrorMessages } from './validation';
-import { REGISTER_URL } from '../constants';
+import { AuthContext, loginUser, resetLoginFailed } from '../contexts/AuthContext';
 
-function Register() {
+function Login() {
   const navigate = useNavigate();
   const defaultFormData = {
-    firstName: '',
-    lastName: '',
     email: '',
     password: '',
-    confirmPassword: '',
   };
 
   const [formData, setFormData] = useState(defaultFormData);
   const [errorMessages, setErrorMessages] = useState(defaultFormData);
   const [wasValidated, setWasValidated] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+
+  const {
+    loginFailed, errorMessage, loading, dispatch, user,
+  } = useContext(AuthContext);
 
   const handleOnChange = ({ target: { name, value } }) => {
     setFormData({
@@ -28,8 +27,7 @@ function Register() {
       [name]: value,
     });
     setWasValidated(false);
-    setAlertMessage('');
-    setSuccess(false);
+    resetLoginFailed(dispatch);
   };
 
   const handleOnSubmit = async (event) => {
@@ -38,36 +36,14 @@ function Register() {
     setErrorMessages(errorMessageList);
     setWasValidated(true);
     if (isFormValid(errorMessageList)) {
-      try {
-        const response = await fetch(REGISTER_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-        if (response.ok) {
-          setSuccess(true);
-          setAlertMessage('Successful registration. Now you can log in.');
-          setTimeout(() => {
-            navigate('/login');
-          }, 3000);
-        } else {
-          const parsedResponse = await response.json();
-          setSuccess(false);
-          setWasValidated(false);
-          setAlertMessage(parsedResponse.message);
-        }
-      } catch (error) {
-        setWasValidated(false);
-        if (!error.response) {
-          setAlertMessage('The server is unavailable. Try again later.');
-        } else {
-          setAlertMessage('Unsuccessful registration.');
-        }
-      }
+      await loginUser(dispatch, formData);
+      setWasValidated(false);
     }
   };
+
+  useEffect(() => {
+    if (user) navigate('/');
+  }, [user]);
 
   return (
     <section className="vh-100">
@@ -79,35 +55,13 @@ function Register() {
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-1 order-lg-1">
                     <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                      Register
+                      Login
                     </p>
                     <form
                       onSubmit={handleOnSubmit}
                       className="mx-1 mx-md-4"
                       noValidate
                     >
-                      <InputField
-                        icon={<Icon.PersonCircle color="cadetblue" className="me-3" size={30} />}
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        placeholder="First name"
-                        value={formData.firstName}
-                        wasValidated={wasValidated}
-                        handleOnChange={handleOnChange}
-                        errorMessages={errorMessages.firstName}
-                      />
-                      <InputField
-                        icon={<Icon.PersonCircle color="coral" className="me-3" size={30} />}
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        placeholder="Last name"
-                        value={formData.lastName}
-                        wasValidated={wasValidated}
-                        handleOnChange={handleOnChange}
-                        errorMessages={errorMessages.lastName}
-                      />
                       <InputField
                         icon={<Icon.EnvelopeFill color="gold" className="me-3" size={30} />}
                         type="text"
@@ -130,30 +84,19 @@ function Register() {
                         handleOnChange={handleOnChange}
                         errorMessages={errorMessages.password}
                       />
-                      <InputField
-                        icon={<Icon.KeyFill color="skyblue" className="me-3" size={30} />}
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        placeholder="Confirm password"
-                        value={formData.confirmPassword}
-                        wasValidated={wasValidated}
-                        handleOnChange={handleOnChange}
-                        errorMessages={errorMessages.confirmPassword}
-                      />
                       <div className="d-flex justify-content-center mx-4 my-2 mb-lg-3">
-                        <button type="submit" className="btn btn-primary btn-lg mt-2">
-                          Register
+                        <button type="submit" className="btn btn-primary btn-lg mt-2" disabled={loading}>
+                          Login
                         </button>
                       </div>
                     </form>
-                    <Link data-testid="link-to-registration" to="/login" className="text-decoration-none">
+                    <Link data-testid="link-to-registration" to="/register" className="text-decoration-none">
                       <p className="text-center">
-                        Login
+                        Register
                       </p>
                     </Link>
-                    {(alertMessage !== '')
-                      && (<Alert success={success} alertMessage={alertMessage} />)}
+                    {(loginFailed)
+                      && (<Alert success={false} alertMessage={errorMessage.message} />)}
                   </div>
                   <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-2 order-lg-2">
                     <img
@@ -172,4 +115,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
