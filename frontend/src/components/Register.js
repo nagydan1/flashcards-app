@@ -1,98 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Icon from 'react-bootstrap-icons';
-import validator from 'validator';
-
+import InputField from './InputField';
+import Alert from './Alert';
+import { isFormValid, getFormErrorMessages } from './validation';
 import { REGISTER_URL } from '../constants';
-import Input from './Input';
 
-function Registration() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [matchPassword, setMatchPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+function Register() {
+  const defaultFormData = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
+
+  const [formData, setFormData] = useState(defaultFormData);
+  const [errorMessages, setErrorMessages] = useState(defaultFormData);
+  const [wasValidated, setWasValidated] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setErrorMessage('');
-  }, [firstName, lastName, email, password, matchPassword]);
-
-  const requestRegister = async () => {
-    try {
-      const response = await fetch(REGISTER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      });
-      if (response.ok) setSuccess(true);
-      if (response.status === 400) {
-        const parsedResponse = await response.json();
-        setErrorMessage(parsedResponse.message);
-      }
-    } catch (error) {
-      setErrorMessage('Error:', error);
-      if (!error?.response) {
-        setErrorMessage('The server is unavailable. Try again later.');
-      } else {
-        setErrorMessage('Registration unsuccessful.');
-      }
-    }
+  const handleOnChange = ({ target: { name, value } }) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setWasValidated(false);
+    setAlertMessage('');
+    setSuccess(false);
   };
 
-  const validaton = () => {
-    setErrorMessage('');
-
-    if (firstName === '' || lastName === '' || email === '' || password === '') {
-      setErrorMessage('Name, e-mail address and password can\'t remain empty.');
-      return false;
-    }
-    if (!validator.isLength(firstName, { max: 20 })) {
-      setErrorMessage('First name can be max. 20 characters.');
-      return false;
-    }
-    if (!validator.isLength(lastName, { max: 20 })) {
-      setErrorMessage('Last name can be max. 20 characters.');
-      return false;
-    }
-    if (!validator.isEmail(email)) {
-      setErrorMessage('Invalid e-mail address.');
-      return false;
-    }
-    if (!validator.isStrongPassword(password, { minSymbols: 0, maxLength: 100 })) {
-      setErrorMessage(
-        'Password must be between 8-100 characters, incl. 1 number, 1 uppercase and 1 lowercase letter.',
-      );
-      return false;
-    }
-    if (password !== matchPassword) {
-      setErrorMessage('Passwords don\'t match. Try again.');
-      return false;
-    }
-    return true;
-  };
-
-  const handleOnSubmit = (event) => {
+  const handleOnSubmit = async (event) => {
     event.preventDefault();
-    if (validaton()) {
-      requestRegister();
+    const errorMessageList = getFormErrorMessages(defaultFormData, formData);
+    setErrorMessages(errorMessageList);
+    setWasValidated(true);
+    if (isFormValid(errorMessageList)) {
+      try {
+        const response = await fetch(REGISTER_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          setSuccess(true);
+          setAlertMessage('Successful registration. Now you can log in.');
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        } else {
+          const parsedResponse = await response.json();
+          setSuccess(false);
+          setWasValidated(false);
+          setAlertMessage(parsedResponse.message);
+        }
+      } catch (error) {
+        setWasValidated(false);
+        if (!error.response) {
+          setAlertMessage('The server is unavailable. Try again later.');
+        } else {
+          setAlertMessage('Unsuccessful registration.');
+        }
+      }
     }
   };
 
   return (
     <>
-      {success && <Navigate replace to="/" />}
-
+      {/* {success && <Navigate replace to="/login" />} */}
       <section className="vh-100">
-
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-lg-12 col-xl-11">
@@ -100,74 +80,83 @@ function Registration() {
                 <div className="card-body p-md-5">
                   <div className="row justify-content-center">
                     <div className="col-md-10 col-lg-6 col-xl-5 order-1 order-lg-1">
-
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                         Register
                       </p>
-
                       <form
                         id="registration-form"
                         onSubmit={handleOnSubmit}
                         className="mx-1 mx-md-4"
                         noValidate
                       >
-                        <Input
+                        <InputField
                           icon={<Icon.PersonCircle color="cadetblue" className="me-3" size={30} />}
                           type="text"
                           id="firstName"
-                          setter={setFirstName}
+                          name="firstName"
                           placeholder="First name"
+                          value={formData.firstName}
+                          wasValidated={wasValidated}
+                          handleOnChange={handleOnChange}
+                          errorMessages={errorMessages.firstName}
                         />
-                        <Input
+                        <InputField
                           icon={<Icon.PersonCircle color="coral" className="me-3" size={30} />}
                           type="text"
                           id="lastName"
-                          setter={setLastName}
+                          name="lastName"
                           placeholder="Last name"
+                          value={formData.lastName}
+                          wasValidated={wasValidated}
+                          handleOnChange={handleOnChange}
+                          errorMessages={errorMessages.lastName}
                         />
-                        <Input
+                        <InputField
                           icon={<Icon.EnvelopeFill color="gold" className="me-3" size={30} />}
-                          type="email"
+                          type="text"
                           id="email"
-                          setter={setEmail}
+                          name="email"
                           placeholder="E-mail address"
+                          value={formData.email}
+                          wasValidated={wasValidated}
+                          handleOnChange={handleOnChange}
+                          errorMessages={errorMessages.email}
                         />
-
-                        <Input
-                          icon={<Icon.LockFill className="me-3" color="grey" size={30} />}
+                        <InputField
+                          icon={<Icon.LockFill color="grey" className="me-3" size={30} />}
                           type="password"
                           id="password"
-                          setter={setPassword}
+                          name="password"
                           placeholder="Password"
+                          value={formData.password}
+                          wasValidated={wasValidated}
+                          handleOnChange={handleOnChange}
+                          errorMessages={errorMessages.password}
                         />
-                        <Input
+                        <InputField
                           icon={<Icon.KeyFill color="skyblue" className="me-3" size={30} />}
                           type="password"
-                          id="matchpassword"
-                          setter={setMatchPassword}
+                          id="confirmPassword"
+                          name="confirmPassword"
                           placeholder="Confirm password"
+                          value={formData.confirmPassword}
+                          wasValidated={wasValidated}
+                          handleOnChange={handleOnChange}
+                          errorMessages={errorMessages.confirmPassword}
                         />
-
                         <div className="d-flex justify-content-center mx-4 my-3 mb-lg-4">
                           <button type="submit" className="btn btn-primary btn-lg">Register</button>
                         </div>
-
                       </form>
-
-                      <div className={errorMessage
-                        ? 'd-block'
-                        : 'd-none'}
-                      >
-                        <p
-                          className="alert alert-danger"
-                          role="alert"
-                          aria-live="assertive"
-                        >
-                          {errorMessage}
-                        </p>
-                      </div>
+                      {(alertMessage !== '')
+                        ? (
+                          <Alert
+                            success={success}
+                            alertMessage={alertMessage}
+                          />
+                        )
+                        : ''}
                     </div>
-
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-2 order-lg-2">
                       <img
                         src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/127090580/original/ef214546a3079c348edaa1c936373c3185223fe5/design-word-cloud-art-poster.png"
@@ -186,4 +175,4 @@ function Registration() {
   );
 }
 
-export default Registration;
+export default Register;
