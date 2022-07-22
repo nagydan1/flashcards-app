@@ -46,7 +46,7 @@ function Login() {
   }, [user]);
 
   return (
-    <section className="vh-100">
+    <section className="my-3 my-lg-5">
       <div className="container h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-lg-12 col-xl-11">
