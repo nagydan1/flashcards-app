@@ -78,9 +78,9 @@ function Register() {
               <div className="card-body p-md-5">
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-1 order-lg-1">
-                    <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                    <h2 className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                       Register
-                    </p>
+                    </h2>
                     <form
                       onSubmit={handleOnSubmit}
                       className="mx-1 mx-md-4"
@@ -142,16 +142,16 @@ function Register() {
                         errorMessages={errorMessages.confirmPassword}
                       />
                       <div className="d-flex justify-content-center mx-4 my-2 mb-lg-3">
-                        <button type="submit" className="btn btn-primary btn-lg mt-2">
+                        <button type="submit" className="btn btn-primary btn-lg mt-2" data-testid="submit">
                           Register
                         </button>
                       </div>
                     </form>
-                    <Link data-testid="link-to-registration" to="/login" className="text-decoration-none">
-                      <p className="text-center">
+                    <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <Link to="/login" className="text-decoration-none text-center">
                         Login
-                      </p>
-                    </Link>
+                      </Link>
+                    </div>
                     {(alertMessage !== '')
                       && (<Alert success={success} alertMessage={alertMessage} />)}
                   </div>

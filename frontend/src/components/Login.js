@@ -90,11 +90,11 @@ function Login() {
                         </button>
                       </div>
                     </form>
-                    <Link data-testid="link-to-registration" to="/register" className="text-decoration-none">
-                      <p className="text-center">
+                    <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <Link to="/register" className="text-decoration-none text-center">
                         Register
-                      </p>
-                    </Link>
+                      </Link>
+                    </div>
                     {(loginFailed)
                       && (<Alert success={false} alertMessage={errorMessage.message} />)}
                   </div>
