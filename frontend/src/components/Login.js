@@ -85,7 +85,7 @@ function Login() {
                         errorMessages={errorMessages.password}
                       />
                       <div className="d-flex justify-content-center mx-4 my-2 mb-lg-3">
-                        <button type="submit" className="btn btn-primary btn-lg mt-2" disabled={loading}>
+                        <button type="submit" className="btn btn-primary btn-lg mt-2" disabled={loading} data-testid="submit">
                           Login
                         </button>
                       </div>

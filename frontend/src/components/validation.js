@@ -40,7 +40,7 @@ const validators = {
   email: [
     {
       fn: isNotEmpty,
-      errorMessage: 'Field is required',
+      errorMessage: 'Field is required.',
     },
     {
       fn: isEmail,
@@ -54,7 +54,7 @@ const validators = {
   password: [
     {
       fn: isNotEmpty,
-      errorMessage: 'Field is required',
+      errorMessage: 'Field is required.',
     },
     {
       fn: isNotLongerThan100,
@@ -68,7 +68,7 @@ const validators = {
   confirmPassword: [
     {
       fn: isNotEmpty,
-      errorMessage: 'Field is required',
+      errorMessage: 'Field is required.',
     },
     {
       fn: isNotLongerThan100,
