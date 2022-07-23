@@ -38,7 +38,7 @@ describe('Register controller\'s post method', () => {
     registerService.createUser.mockResolvedValueOnce(data);
     await registerController.post(mockReq, mockRes, mockNext);
     expect(mockRes.status).toBeCalledWith(201);
-    expect(mockRes.json).toBeCalledWith({ user: data });
+    expect(mockRes.json).toBeCalledWith(data);
     expect(mockRes.json).toBeCalledTimes(1);
   });
 });

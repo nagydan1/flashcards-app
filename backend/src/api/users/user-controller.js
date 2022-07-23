@@ -11,7 +11,7 @@ const userController = {
   },
   async patch(req, res, next) {
     try {
-      const data = await userService.patchUserData(req);
+      const data = await userService.patchUser(req);
       res.status(200).json(data);
     } catch (error) {
       next(error);

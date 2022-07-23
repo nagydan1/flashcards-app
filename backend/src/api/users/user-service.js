@@ -8,7 +8,7 @@ const userService = {
     return User.findById(_id).select('firstName lastName');
   },
 
-  async patchUserData(req) {
+  async patchUser(req) {
     const { email, password, ...newData } = req.body;
 
     if (Object.keys(newData).length === 0 || newData === undefined) {
@@ -46,7 +46,6 @@ const userService = {
       }
     });
     if (isOldPwdCorrect) currentData.password = newData.newPassword;
-
     try {
       // eslint-disable-next-line no-shadow
       const { _doc: { password, ...updatedData } } = await currentData.save();
