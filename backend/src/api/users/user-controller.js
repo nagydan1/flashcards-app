@@ -1,12 +1,20 @@
 import userService from './user-service';
 
 const userController = {
-  async post(req, res, next) {
+  async get(req, res, next) {
     try {
-      const data = await userService.createUser(req.body);
+      const data = await userService.getUserById(req.user._id);
       res.status(200).json(data);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
+    }
+  },
+  async patch(req, res, next) {
+    try {
+      const data = await userService.patchUserData(req);
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
     }
   },
 };

@@ -44,6 +44,7 @@ UserSchema.pre('save', function (next) {
   });
 });
 
+// eslint-disable-next-line func-names
 UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };

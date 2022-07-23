@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import AuthService from './AuthService';
+import AuthService from './authService';
 
 const mockUser = {
   _id: '62d86531c448aa42d325cc43',
