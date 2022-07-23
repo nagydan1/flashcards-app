@@ -12,7 +12,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/resCards'
+                $ref: '#/components/schemas/cardsRes'
         401:
           description: 'Authorization error message'
           content:
@@ -231,7 +231,7 @@ components:
         - nativeText
         - foreignText
         
-    resCards:
+    cardsRes:
       type: object
       properties:
         cards:
