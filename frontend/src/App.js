@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
+import ManageCardsPage from './pages/ManageCardsPage';
 import './App.scss';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/manage-cards" element={<ManageCardsPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
