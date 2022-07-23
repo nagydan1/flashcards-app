@@ -122,21 +122,18 @@ components:
     userRes:
       type: object
       properties:
-        user:
-          type: object
-          properties:
-            firstName:
-              type: string
-              example: Tom
-            lastName:
-              type: string
-              example: Test
-            email:
-              type: string
-              example: tom.test@tmail.com
-            _id:
-              type: string
-              example: 62d6bc1900cec15491b56907
+        firstName:
+          type: string
+          example: Tom
+        lastName:
+          type: string
+          example: Test
+        email:
+          type: string
+          example: tom.test@tmail.com
+        _id:
+          type: string
+          example: 62d6bc1900cec15491b56907
    
   requestBody:
     userReg:

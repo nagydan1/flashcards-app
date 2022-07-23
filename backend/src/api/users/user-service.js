@@ -35,9 +35,9 @@ const userService = {
       try {
         isOldPwdCorrect = await currentData.comparePassword(newData.oldPassword);
       } catch (error) {
-        throw new HttpError('Server Error', 500);
+        throw new HttpError('Server error.', 500);
       }
-      if (!isOldPwdCorrect) throw new HttpError('Old password is incorrect', 401);
+      if (!isOldPwdCorrect) throw new HttpError('Old password is incorrect.', 401);
     }
 
     Object.keys(newData).forEach((key) => {
@@ -56,7 +56,7 @@ const userService = {
 
       const invalidField = Object.values(error.errors)[0];
       if (invalidField.kind === 'required') {
-        throw new HttpError('All fields are required.', 400);
+        throw new HttpError('Name fields are required.', 400);
       } else if (invalidField.kind === 'maxlength') {
         throw new HttpError(`${invalidField.path} can't be longer than ${invalidField.properties.maxlength} characters.`, 400);
       } else {
