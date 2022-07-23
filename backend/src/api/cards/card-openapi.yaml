@@ -1,0 +1,260 @@
+paths:
+  /api/cards:
+    get:
+      summary: 'Get cards'
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+      responses:
+        200:
+          description: 'List of cards'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resCards'
+        401:
+          description: 'Authorization error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+    post:
+      summary: 'Create new card'
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+      requestBody:
+        $ref: '#/components/requestBody/card'
+        
+      responses:
+        200:
+          description: 'Card has been created'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Saved successfully.'
+        400:
+          description: 'Error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'All fields are required.'
+        401:
+          description: 'Authorization error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+        500:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error.'
+
+  /api/cards/{cardId}:
+    patch:
+      summary: 'Edit a card by ID'
+      parameters:
+        - in: path
+          name: cardId
+          schema:
+            type: string
+          required: true
+          description: ID of the card that is to be updated.
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+      requestBody:
+        $ref: '#/components/requestBody/card'
+        
+      responses:
+        200:
+          description: 'Card has been updated'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Updated successfully.'
+        400:
+          description: 'Error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'All fields are required.'
+        401:
+          description: 'Authorization error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+        403:
+          description: 'Permission error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Permission denied.'       
+        404:
+          description: 'Endpoint not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Card ID is not valid.'
+        500:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error.'
+    delete:
+      summary: 'Delete a card by ID'
+      parameters:
+        - in: path
+          name: cardId
+          schema:
+            type: string
+          required: true
+          description: ID of the card that is to be deleted.
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+        
+      responses:
+        200:
+          description: 'Card has been deleted'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Deleted successfully.'
+        401:
+          description: 'Authorization error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+        403:
+          description: 'Permission error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Permission denied.'       
+        404:
+          description: 'Endpoint not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Card ID is not valid.'
+        500:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error.'
+
+components:
+  schemas:
+    card:
+      type: object
+      properties:
+        nativeText:
+          type: string
+        foreignText:
+          type: string
+      required:
+        - nativeText
+        - foreignText
+        
+    resCards:
+      type: object
+      properties:
+        cards:
+          type: array
+          items:
+            type: object
+            properties:
+              nativeText:
+                type: string
+              foreignText:               
+                 type: string
+
+  requestBody:
+    card:
+      description: JSON object containing card schema
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/card'
+  
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JSON object including user id under 'id' key as JWT
