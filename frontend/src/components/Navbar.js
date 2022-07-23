@@ -26,6 +26,10 @@ function NavBar() {
                   <i className="bi bi-house-fill " />
                   <span className="ms-1 details-info ">Home</span>
                 </NavLink>
+                <NavLink to="/profile" className="d-flex px-2 py-1 text-decoration-none navIcon">
+                  <i className="bi bi-person-fill " />
+                  <span className="ms-1 details-info ">Profile</span>
+                </NavLink>
                 <NavLink to="/login" className="d-flex px-2 py-1 text-decoration-none navIcon" onClick={() => logout(dispatch)}>
                   <i className="bi bi-box-arrow-in-right" />
                   <span className="ms-1 details-info">Logout</span>

@@ -16,6 +16,21 @@ function isValidPassword(password) {
   return isStrongPassword(password, { minSymbols: 0 });
 }
 
+const passwordValidators = [
+  {
+    fn: isNotEmpty,
+    errorMessage: 'Field is required.',
+  },
+  {
+    fn: isNotLongerThan100,
+    errorMessage: 'Max. 100 characters.',
+  },
+  {
+    fn: isValidPassword,
+    errorMessage: 'Min. 8 characters, incl. 1 number, 1 uppercase and 1 lowercase letter.',
+  },
+];
+
 const validators = {
   firstName: [
     {
@@ -51,34 +66,11 @@ const validators = {
       errorMessage: 'Max. 100 characters.',
     },
   ],
-  password: [
-    {
-      fn: isNotEmpty,
-      errorMessage: 'Field is required.',
-    },
-    {
-      fn: isNotLongerThan100,
-      errorMessage: 'Max. 100 characters.',
-    },
-    {
-      fn: isValidPassword,
-      errorMessage: 'Min. 8 characters, incl. 1 number, 1 uppercase and 1 lowercase letter.',
-    },
-  ],
-  confirmPassword: [
-    {
-      fn: isNotEmpty,
-      errorMessage: 'Field is required.',
-    },
-    {
-      fn: isNotLongerThan100,
-      errorMessage: 'Max. 100 characters.',
-    },
-    {
-      fn: isValidPassword,
-      errorMessage: 'Min. 8 characters, incl. 1 number, 1 uppercase and 1 lowercase letter.',
-    },
-  ],
+  password: passwordValidators,
+  confirmPassword: passwordValidators,
+  oldPassword: passwordValidators,
+  newPassword: passwordValidators,
+  confirmNewPassword: passwordValidators,
 };
 
 function getInputErrorMessages(inputName, inputValue) {
@@ -99,8 +91,16 @@ export function getFormErrorMessages(defaultFormData, formData) {
       [inputName]: getInputErrorMessages(inputName, formData[inputName]),
     };
   });
-  if (formData.confirmPassword !== formData.password) {
+  if (formData.oldPassword === '' && formData.newPassword === ''
+    && formData.confirmNewPassword === '') {
+    formErrorMessages.oldPassword = [];
+    formErrorMessages.newPassword = [];
+    formErrorMessages.confirmNewPassword = [];
+  }
+  if (formData.confirmPassword !== formData.password
+    || formData.confirmNewPassword !== formData.newPassword) {
     formErrorMessages.confirmPassword?.push('Passwords don\'t match. Try again.');
+    formErrorMessages.confirmNewPassword?.push('New passwords don\'t match. Try again.');
   }
   return formErrorMessages;
 }
@@ -119,6 +119,7 @@ export function getValidationClassName(errorMessages, wasValidated) {
 }
 
 export function isFormValid(errorMessagesByInput) {
+  // console.log(errorMessagesByInput);
   const errorMessagesValues = Object.values(errorMessagesByInput);
   const fieldValidities = errorMessagesValues.map((errorMessages) => errorMessages.length === 0);
   const isValid = fieldValidities.every((fieldValidity) => fieldValidity);
