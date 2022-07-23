@@ -117,7 +117,7 @@ describe('After submitting a valid form on Register component', () => {
     fireEvent.change(getByPlaceholderText('Password'), { target: { value: '1212qwQW' } });
     fireEvent.change(getByPlaceholderText('Confirm password'), { target: { value: '1212qwQW' } });
     fireEvent.click(getByTestId('submit'));
-    await waitFor(() =>{
+    await waitFor(() => {
       expect(mockFetch).toBeCalledTimes(1);
       expect(mockFetch).toBeCalledWith(REGISTER_URL, { body, headers: { 'Content-Type': 'application/json' }, method: 'POST' });
     });
@@ -140,7 +140,7 @@ describe('After submitting a valid form on Register component', () => {
     fireEvent.change(getByPlaceholderText('Password'), { target: { value: '1212qwQW' } });
     fireEvent.change(getByPlaceholderText('Confirm password'), { target: { value: '1212qwQW' } });
     fireEvent.click(getByTestId('submit'));
-    expect(await findByText("Successful registration. Now you can log in.")).toBeInTheDocument();
+    expect(await findByText('Successful registration. Now you can log in.')).toBeInTheDocument();
   });
 
   it('shows error alert if response is 401', async () => {
@@ -162,7 +162,7 @@ describe('After submitting a valid form on Register component', () => {
     fireEvent.change(getByPlaceholderText('Password'), { target: { value: '1212qwQW' } });
     fireEvent.change(getByPlaceholderText('Confirm password'), { target: { value: '1212qwQW' } });
     fireEvent.click(getByTestId('submit'));
-    expect(await findByText("E-mail or password is incorrect.")).toBeInTheDocument();
+    expect(await findByText('E-mail or password is incorrect.')).toBeInTheDocument();
   });
 
   it('shows error alert if error is cought', async () => {
@@ -182,6 +182,6 @@ describe('After submitting a valid form on Register component', () => {
     fireEvent.change(getByPlaceholderText('Password'), { target: { value: '1212qwQW' } });
     fireEvent.change(getByPlaceholderText('Confirm password'), { target: { value: '1212qwQW' } });
     fireEvent.click(getByTestId('submit'));
-    expect(await findByText("The server is unavailable. Try again later.")).toBeInTheDocument();
+    expect(await findByText('The server is unavailable. Try again later.')).toBeInTheDocument();
   });
 });

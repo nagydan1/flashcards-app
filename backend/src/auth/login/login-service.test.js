@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
 import User from '../../api/users/user-model';
 import loginService from './login-service';
 import HttpError from '../../utils/HttpError';
@@ -12,7 +11,7 @@ const mockUserFromBd = {
   lastName: 'Test',
   email: 'tom.test@tmail.com',
   password: '$2a$10$vD3bIpA2MBzoyLG02.Jdk.RgWoMzvkVmK2KXTWE9pgEGPUlvFIzpC',
-  _id: ObjectId(),
+  _id: '62d986931a3a341f2e1ab5b5',
   __v: 0,
   comparePassword: jest.fn(),
 };
@@ -169,7 +168,7 @@ describe('Login service\'s getToken method', () => {
     jwt.sign = jest.fn();
     await loginService.getToken(mockUserData);
     expect(jwt.sign.mock.calls[0][0]).toEqual({
-      id: mockUserFromBd._id.toString(),
+      _id: mockUserFromBd._id,
       firstName: mockUserFromBd.firstName,
       roles: ['user'],
     });

@@ -9,7 +9,7 @@ const loginService = {
 
   createToken(user) {
     const payload = {
-      id: user._id.toString(),
+      _id: user._id,
       firstName: user.firstName,
       roles: ['user'],
     };

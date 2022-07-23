@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, act } from '@testing-library/react';
 import Login from './Login';
 import { LOGIN_URL } from '../constants';
 import renderWithAllProviders from '../test-utils';
@@ -85,7 +85,7 @@ describe('After submitting a valid form on Login component', () => {
     fireEvent.change(getByPlaceholderText('E-mail address'), { target: { value: 'tom-test@tmail.com' } });
     fireEvent.change(getByPlaceholderText('Password'), { target: { value: '1212qwQW' } });
     fireEvent.click(getByTestId('submit'));
-    await waitFor(() => {
+    await act(() => {
       expect(mockFetch).toBeCalledTimes(1);
       expect(mockFetch).toBeCalledWith(LOGIN_URL, { body, headers: { 'Content-Type': 'application/json' }, method: 'POST' });
     });
