@@ -1,0 +1,36 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    ports:
+    - '27037:27017'
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/flashcards --quiet
+
+  frontend:
+    build: frontend
+    environment:
+      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+  backend:
+    build: backend
+    ports:
+      - '3030:3030'
+    environment:
+      - PORT=${PORT}
+      - DB_URI=${DB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    depends_on:
+      mongo:
+        condition: service_healthy 
+        
