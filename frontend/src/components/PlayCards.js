@@ -7,7 +7,7 @@ import Alert from './Alert';
 import InputField from './InputField';
 import { AuthContext } from '../contexts/AuthContext';
 
-function PlayCards({ resourceURL, title }) {
+function PlayCards({ resourceURL, title, setHasDeck }) {
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
   const [answer, setAnswer] = useState('');
@@ -49,6 +49,10 @@ function PlayCards({ resourceURL, title }) {
           headers: getHeader,
         });
         const cardObject = await response.json();
+        if (cardObject.cards.length === 0) {
+          setAlertMessage('First you need to create cards.');
+          if (setHasDeck) setHasDeck(false);
+        }
         flipCard(cardObject.cards);
       } catch (error) {
         if (!error.response) {

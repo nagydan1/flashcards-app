@@ -3,3 +3,4 @@ export const REGISTER_URL = `${BACKEND_URL}/auth/register/`;
 export const LOGIN_URL = `${BACKEND_URL}/auth/login/`;
 export const USERS_URL = `${BACKEND_URL}/api/users/`;
 export const CARDS_URL = `${BACKEND_URL}/api/cards/`;
+export const DEMOCARDS_URL = `${BACKEND_URL}/api/democards/`;
