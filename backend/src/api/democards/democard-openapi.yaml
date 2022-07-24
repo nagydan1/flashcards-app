@@ -1,0 +1,28 @@
+paths:
+  /api/democards:
+    get:
+      summary: 'Get demo cards'
+      tags:
+        - api
+      responses:
+        200:
+          description: 'List of demo cards'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resDemoCards'
+
+components:
+  schemas:
+    resDemoCards:
+      type: object
+      properties:
+        demoCards:
+          type: array
+          items:
+            type: object
+            properties:
+              nativeText:
+                type: string
+              foreignText:               
+               type: string
