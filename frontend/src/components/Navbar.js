@@ -30,6 +30,10 @@ function NavBar() {
                   <i className="bi bi-person-fill " />
                   <span className="ms-1 details-info ">Profile</span>
                 </NavLink>
+                <NavLink to="/play-cards" className="d-flex px-2 py-1 text-decoration-none navIcon">
+                  <i className="bi bi-play-circle-fill " />
+                  <span className="ms-1 details-info ">Play</span>
+                </NavLink>
                 <NavLink to="/manage-cards" className="d-flex px-2 py-1 text-decoration-none navIcon">
                   <i className="bi bi-stack " />
                   <span className="ms-1 details-info ">Cards</span>

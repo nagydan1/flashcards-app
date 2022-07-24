@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ManageCardsPage from './pages/ManageCardsPage';
+import PlayCardsPage from './pages/PlayCardsPage';
 import './App.scss';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/manage-cards" element={<ManageCardsPage />} />
+          <Route path="/play-cards" element={<PlayCardsPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

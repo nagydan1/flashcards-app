@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import Alert from './Alert';
 import TableItem from './TableItem';
@@ -44,6 +45,7 @@ export default function CardsTable({ setCreateToggle }) {
         >
           Create new card
         </button>
+        {(cards.length !== 0) && <Link to="/play-cards" className="btn btn-warning mb-3 mx-4">Play with cards</Link>}
       </div>
       <Table striped>
         <thead>

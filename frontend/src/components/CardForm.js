@@ -1,4 +1,6 @@
-import { useState, useContext } from 'react';
+import {
+  useState, useContext, useEffect, useRef,
+} from 'react';
 import * as Icon from 'react-bootstrap-icons';
 import Alert from './Alert';
 import InputField from './InputField';
@@ -16,6 +18,8 @@ function CardForm({ setCreateToggle }) {
   const [formData, setFormData] = useState(defaultFormData);
   const [alertMessage, setAlertMessage] = useState('');
   const [success, setSuccess] = useState(false);
+
+  const inputRef = useRef(null);
 
   function handleValidation() {
     setAlertMessage('');
@@ -67,12 +71,17 @@ function CardForm({ setCreateToggle }) {
     }
   };
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [success]);
+
   return (
     <div className="col-md-10 col-lg-6 col-xl-5 text-center">
       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">New card</p>
 
       <form onSubmit={handleSubmit} className="mx-1 mx-md-4" noValidate>
         <InputField
+          ref={inputRef}
           icon={<Icon.ChatLeftDots color="coral" className="me-3" size={30} />}
           type="text"
           id="nativeText"
