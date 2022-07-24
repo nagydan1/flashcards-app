@@ -48,7 +48,7 @@ describe('Card service\'s getCards method', () => {
   });
 
   it('should return cards from database', async () => {
-    const req = { user: {_id: '6257326ca4457e2db2e75614' } };
+    const req = { user: { _id: '6257326ca4457e2db2e75614' } };
     Card.find.mockReturnValue(mockCardsList);
     mockSelect.mockResolvedValueOnce(mockCardsList);
     const data = await cardService.getCards(req.user._id);

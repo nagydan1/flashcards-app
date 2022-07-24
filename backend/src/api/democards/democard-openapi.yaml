@@ -17,7 +17,7 @@ components:
     resDemoCards:
       type: object
       properties:
-        demoCards:
+        cards:
           type: array
           items:
             type: object
