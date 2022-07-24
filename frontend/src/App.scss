@@ -1,0 +1,71 @@
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-icons/font/bootstrap-icons.scss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+body{
+  background-color: $gray-500;
+}
+
+.poppins{
+  font-family: 'Poppins', sans-serif;
+}
+
+.navIcon{
+  color: $dark;
+}
+.navIcon:hover{
+  color: $warning;
+}
+nav .active {
+ color: $warning;
+}
+
+nav a {
+  color: $dark;
+}
+
+nav .brand.active{
+  border-bottom: 0;
+}
+nav .active .details-info{
+  opacity: 1;
+  max-width: 200px;
+}
+.navIcon>.details-info {
+  opacity: 1;
+  max-width: 200px;
+  display: inline-block;
+}
+
+.navbar-light .navbar-toggler {
+  border: 0;
+}
+.navbar-toggler:focus {
+  text-decoration: none;
+  outline: 0;
+  box-shadow: none;
+}
+
+@media screen and (min-width: 576px) {
+  nav {
+    color: $dark;
+  }
+  
+  nav .active {
+    border-bottom: 3px solid $warning;
+  }
+
+  .navIcon>.details-info {
+    overflow-x: hidden;
+    opacity: 0;
+    max-width: 0;
+    display: inline-block;
+  }
+
+  .navIcon:hover .details-info  {
+    opacity: 1;
+    max-width: 200px;
+    transition: max-width 2s ease-out .1s, opacity 1s ease-out .1s;
+  }
+
+}

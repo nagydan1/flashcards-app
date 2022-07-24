@@ -1,0 +1,128 @@
+paths:
+  /api/users:
+    get:
+      summary: 'Get user data by _id inside JWT'
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+      responses:
+        200:
+          description: 'Object of user data that is saved in the database at the time of the response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+        401:
+          description: 'Unauthorized error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+    patch:
+      summary: 'Update user data by _id inside JWT'
+      security:
+        - bearerAuth: []
+      tags:
+        - api
+      requestBody:
+        $ref: '#/components/requestBody/updateBody'
+      responses:
+        200:
+          description: 'Object of user data that is saved in the database at the time of the response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+        400:
+          description: 'Bad request error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Name fields are required.'
+        401:
+          description: 'Unauthorized error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Missing token.'
+        500:
+          description: 'Server error message'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Server error.'
+
+components:
+  schemas:
+    userUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Tom
+          max: 20
+        lastName:
+          type: string
+          example: Test
+          max: 20
+        oldPassword:
+          type: string
+          format: password
+          min: 8
+          max: 100
+          example: Abcd1234
+        newPassword:
+          type: string
+          format: password
+          min: 8
+          max: 100
+          example: Abcd1234
+      required:
+        - firstName
+        - lastName
+
+    userData:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6257326ca4457e2db2e75614
+        firstName:
+          type: string
+          example: Tom
+        lastName:
+          type: string
+          example: Test
+
+  requestBody:
+    updateBody:
+      description: JSON object containing updateUserData schema
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userUpdate'
+  
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JSON object including user ID under '_id'
+      
